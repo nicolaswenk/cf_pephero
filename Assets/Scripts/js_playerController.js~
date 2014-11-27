@@ -1,0 +1,100 @@
+#pragma strict
+
+var keyToggle: boolean = true;
+var axisVertical: float = 5.0;
+var clampTop: float;
+var clampBottom: float;
+var projectile: GameObject;
+var muzzle: GameObject;
+var shield: GameObject;
+var enemy0:GameObject;
+var enemy1:GameObject;
+var enemy2:GameObject;
+//var pressureScript:readSerialPort;
+var actualPressure : float = 5.0;
+
+
+public var waveSpawner: GameObject;
+var otherScript: Waves;
+//var pressureScript: readSerialPort;
+var fireSwitch:boolean= true;
+
+function Start () {
+	shield = GameObject.FindWithTag("Shield");
+	shield.SetActive(false);
+	
+	waveSpawner = GameObject.Find("waveSpawner");
+	otherScript = waveSpawner.GetComponent("Waves");
+	//pressureScript = GameObject.GetComponent("readSerialPort");
+	enemy0 = GameObject.Find("enemy0");
+	enemy1 = GameObject.Find("enemy1");
+	enemy2 = GameObject.Find("enemy");
+}
+
+function Update () {
+	
+	//pressureScript = GetComponent("readSerialPort");
+	//actualPressure = readSerialPort.pressure;
+//	if (Input.GetAxis("Vertical"){
+//		
+//	}
+	
+	if(transform.position.y >= clampBottom && transform.position.y <= clampTop){
+ 		if(Input.GetKeyDown("space")){
+		
+			for (var i = 0; i< otherScript.enemyList.Count;i++){
+			var newGuy: GameObject = new GameObject();		
+			var bulletScript:js_bulletController;
+	
+				
+				newGuy = Instantiate(projectile);
+				newGuy.transform.position.x = transform.position.x;
+				newGuy.transform.position.y = transform.position.y;
+				bulletScript = newGuy.GetComponent("js_bulletController");
+				var actualDistance:Vector2 = new Vector2(0,0);
+				var bulletStep:Vector2 = new Vector2(0,0);
+				var tempDst:Vector2 = new Vector2(0,0);
+				//actualDistance = otherScript.enemyList[i].transform.position-this.transform.position;
+				tempDst = enemy0.transform.TransformPoint(0,0,0);
+				actualDistance = tempDst-newGuy.transform.position;
+				
+				bulletStep = Vector3.Normalize(actualDistance);				
+				bulletScript.getVect(bulletStep);
+			}
+			
+		
+			
+		}
+		
+	}
+	else { //out of range
+	    transform.position.y = Mathf.Clamp(transform.position.y, clampBottom, clampTop);
+//	    rigidbody2D.velocity = Vector3.zero;
+	}
+	
+	if(keyToggle){
+		if(Input.GetKeyDown(KeyCode.UpArrow)){
+//			 rigidbody2D.velocity = transform.up * axisVertical;
+		}
+	}	
+	
+	if(Input.GetKeyDown("t")){
+		keyToggle = !keyToggle;
+	}
+	
+	if(Input.GetKeyDown("s")){
+		shield.SetActive(true);
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
